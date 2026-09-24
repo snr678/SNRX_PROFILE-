@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,6 +42,11 @@ body{
     color:white;
     font-family:'Rajdhani',sans-serif;
     overflow-x:hidden;
+
+    /* IMPORTANT:
+       Hide the native cursor only on desktop.
+       Custom cursor is handled below.
+    */
     cursor:none;
 }
 
@@ -52,49 +58,64 @@ body{
 .cursor{
     position:fixed;
 
+    /* Start position */
+    left:0;
+    top:0;
+
     width:8px;
     height:8px;
 
     border-radius:50%;
 
-    background:white;
+    background:#ffffff;
 
     pointer-events:none;
 
-    z-index:99999;
+    /* Must stay above EVERYTHING */
+    z-index:100000;
 
-    transform:translate(-50%,-50%);
+    /* Movement is done with transform */
+    transform:translate3d(-100px,-100px,0) translate(-50%,-50%);
 
     box-shadow:
-        0 0 8px white,
+        0 0 8px #ffffff,
         0 0 20px var(--red),
         0 0 40px var(--red);
+
+    will-change:transform;
 }
 
 .cursor-ring{
     position:fixed;
 
+    left:0;
+    top:0;
+
     width:38px;
     height:38px;
 
     border:1px solid rgba(255,23,68,.75);
-
     border-radius:50%;
 
     pointer-events:none;
 
-    z-index:99998;
+    z-index:99999;
 
-    transform:translate(-50%,-50%);
+    transform:translate3d(-100px,-100px,0) translate(-50%,-50%);
 
     transition:
         width .2s ease,
         height .2s ease,
         border .2s ease;
+
+    will-change:transform;
 }
 
 .cursor-glow{
     position:fixed;
+
+    left:0;
+    top:0;
 
     width:280px;
     height:280px;
@@ -103,9 +124,9 @@ body{
 
     pointer-events:none;
 
-    z-index:-2;
+    z-index:9998;
 
-    transform:translate(-50%,-50%);
+    transform:translate3d(-100px,-100px,0) translate(-50%,-50%);
 
     background:
         radial-gradient(
@@ -113,6 +134,8 @@ body{
             rgba(255,0,40,.13),
             transparent 68%
         );
+
+    will-change:transform;
 }
 
 
@@ -124,11 +147,11 @@ body::after{
     content:"";
 
     position:fixed;
-
     inset:0;
 
     pointer-events:none;
 
+    /* Lower than custom cursor */
     z-index:9990;
 
     background:
@@ -152,31 +175,26 @@ body::before{
     content:"";
 
     position:fixed;
-
     inset:0;
 
     z-index:-10;
 
     background:
-
         radial-gradient(
             circle at var(--mouseX,50%) var(--mouseY,50%),
             rgba(255,0,40,.10),
             transparent 24%
         ),
-
         radial-gradient(
             circle at 50% 15%,
             rgba(255,0,40,.09),
             transparent 35%
         ),
-
         radial-gradient(
             circle at 10% 90%,
             rgba(255,0,40,.05),
             transparent 30%
         ),
-
         #020202;
 }
 
@@ -192,8 +210,7 @@ body::before{
 
     width:2px;
 
-    border-radius:
-        0 0 10px 10px;
+    border-radius:0 0 10px 10px;
 
     background:
         linear-gradient(
@@ -206,8 +223,7 @@ body::before{
 
     z-index:-1;
 
-    animation:
-        bloodFall linear infinite;
+    animation:bloodFall linear infinite;
 }
 
 @keyframes bloodFall{
@@ -227,7 +243,6 @@ body::before{
     position:fixed;
 
     height:1px;
-
     width:0;
 
     pointer-events:none;
@@ -266,7 +281,6 @@ body::before{
 .aura-middle{
     left:50%;
     top:44%;
-
     transform:translateX(-50%);
 }
 
@@ -284,9 +298,6 @@ body.scrolling .aura-middle{
     width:42vw;
     opacity:.3;
 }
-
-
-/* moving aura particle */
 
 .aura-particle{
     position:fixed;
@@ -311,9 +322,7 @@ body.scrolling .aura-middle{
 
 body.scrolling .aura-particle{
     opacity:1;
-
-    animation:
-        auraMove 1.8s linear infinite;
+    animation:auraMove 1.8s linear infinite;
 }
 
 @keyframes auraMove{
@@ -349,8 +358,7 @@ body.scrolling .aura-particle{
 
     transform:translate(-50%,-50%);
 
-    animation:
-        ripple .7s ease-out forwards;
+    animation:ripple .7s ease-out forwards;
 }
 
 @keyframes ripple{
@@ -358,7 +366,6 @@ body.scrolling .aura-particle{
     0%{
         width:10px;
         height:10px;
-
         opacity:1;
 
         box-shadow:
@@ -368,7 +375,6 @@ body.scrolling .aura-particle{
     100%{
         width:190px;
         height:190px;
-
         opacity:0;
 
         box-shadow:
@@ -443,23 +449,19 @@ nav{
     display:flex;
 
     align-items:center;
-
     justify-content:space-between;
 
     z-index:500;
 
-    background:
-        rgba(0,0,0,.48);
+    background:rgba(0,0,0,.48);
 
-    backdrop-filter:
-        blur(18px);
+    backdrop-filter:blur(18px);
 
     border-bottom:
         1px solid rgba(255,0,40,.12);
 }
 
 .nav-logo{
-
     font-family:'Orbitron';
 
     font-weight:900;
@@ -476,7 +478,6 @@ nav{
 }
 
 .status{
-
     font-family:'Share Tech Mono';
 
     font-size:10px;
@@ -487,7 +488,6 @@ nav{
 }
 
 .status::before{
-
     content:"";
 
     display:inline-block;
@@ -507,22 +507,225 @@ nav{
 
 
 /* =====================================================
+   CINEMATIC MEDIA
+===================================================== */
+
+.cinematic-video{
+    display:block;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    object-position:center;
+
+    pointer-events:none;
+
+    user-select:none;
+    -webkit-user-select:none;
+}
+
+.cinematic-video::-webkit-media-controls{
+    display:none !important;
+}
+
+.video-hero{
+    position:absolute;
+
+    z-index:0;
+
+    top:45%;
+    left:50%;
+
+    width:min(760px,74vw);
+    height:min(640px,72vh);
+
+    transform:translate(-50%,-50%);
+
+    overflow:hidden;
+
+    border-radius:30px;
+
+    object-position:center 35%;
+
+    opacity:.38;
+
+    filter:
+        saturate(.78)
+        contrast(1.16)
+        brightness(.65);
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            transparent 0%,
+            rgba(0,0,0,.9) 17%,
+            #000 43%,
+            #000 62%,
+            rgba(0,0,0,.82) 83%,
+            transparent 100%
+        );
+
+    -webkit-mask-image:
+        linear-gradient(
+            to bottom,
+            transparent 0%,
+            rgba(0,0,0,.9) 17%,
+            #000 43%,
+            #000 62%,
+            rgba(0,0,0,.82) 83%,
+            transparent 100%
+        );
+
+    box-shadow:
+        0 0 80px rgba(255,0,40,.08);
+}
+
+.video-hero::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(2,2,2,.94) 0%,
+            rgba(2,2,2,.24) 38%,
+            rgba(2,2,2,.30) 62%,
+            rgba(2,2,2,.96) 100%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(2,2,2,.8),
+            transparent 30%,
+            transparent 68%,
+            rgba(2,2,2,.94)
+        );
+
+    pointer-events:none;
+}
+
+.video-mid-wrap{
+    width:min(1100px,92%);
+
+    height:clamp(220px,38vw,410px);
+
+    margin:
+        0 auto 125px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:22px;
+
+    border:
+        1px solid rgba(255,0,40,.17);
+
+    background:#050505;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.72),
+        0 0 55px rgba(255,0,40,.045);
+}
+
+.video-mid{
+    position:relative;
+
+    z-index:1;
+
+    opacity:.78;
+
+    filter:
+        saturate(.82)
+        contrast(1.08)
+        brightness(.63);
+
+    transform:scale(1.025);
+}
+
+.video-mid-wrap::before{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    z-index:2;
+
+    pointer-events:none;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(2,2,2,.72),
+            transparent 25%,
+            transparent 72%,
+            rgba(2,2,2,.76)
+        ),
+        linear-gradient(
+            180deg,
+            rgba(2,2,2,.6),
+            transparent 24%,
+            transparent 72%,
+            rgba(2,2,2,.86)
+        );
+}
+
+.video-mid-wrap::after{
+    content:"";
+
+    position:absolute;
+
+    z-index:3;
+
+    inset:12px;
+
+    border:
+        1px solid rgba(255,255,255,.035);
+
+    border-radius:16px;
+
+    pointer-events:none;
+}
+
+.video-mid-bmw{
+    margin-top:0;
+    margin-bottom:125px;
+}
+
+@media (max-width:850px){
+
+    .video-mid-bmw{
+        margin-bottom:100px;
+    }
+
+}
+
+@media (max-width:550px){
+
+    .video-mid-bmw{
+        margin-bottom:85px;
+    }
+
+}
+
+
+/* =====================================================
    HERO
 ===================================================== */
 
 .hero{
-
     min-height:100vh;
 
-    padding:
-        120px 20px 80px;
+    padding:120px 20px 80px;
 
     display:flex;
 
     flex-direction:column;
 
     align-items:center;
-
     justify-content:center;
 
     text-align:center;
@@ -533,8 +736,12 @@ nav{
         transform .18s ease-out;
 }
 
-.mini{
+.hero > *:not(.video-hero){
+    position:relative;
+    z-index:2;
+}
 
+.mini{
     font-family:'Share Tech Mono';
 
     font-size:11px;
@@ -547,11 +754,16 @@ nav{
 
     animation:
         fadeUp 1s ease;
+
+    position:relative;
+
+    z-index:2;
 }
 
 .logo{
-
     position:relative;
+
+    z-index:2;
 
     font-family:'Orbitron';
 
@@ -573,7 +785,6 @@ nav{
 }
 
 .logo::after{
-
     content:"SNRX";
 
     position:absolute;
@@ -617,6 +828,9 @@ nav{
 }
 
 .tagline{
+    position:relative;
+
+    z-index:2;
 
     font-family:'Share Tech Mono';
 
@@ -631,12 +845,10 @@ nav{
     color:var(--red);
 }
 
-
-/* =====================================================
-   INTRO
-===================================================== */
-
 .intro{
+    position:relative;
+
+    z-index:2;
 
     max-width:720px;
 
@@ -644,7 +856,6 @@ nav{
 }
 
 .quote{
-
     font-family:'Orbitron';
 
     font-size:
@@ -654,7 +865,6 @@ nav{
 }
 
 .quote span{
-
     color:var(--red);
 
     text-shadow:
@@ -662,7 +872,6 @@ nav{
 }
 
 .description{
-
     margin-top:20px;
 
     color:#666;
@@ -674,12 +883,10 @@ nav{
     line-height:1.8;
 }
 
-
-/* =====================================================
-   TAGS
-===================================================== */
-
 .tags{
+    position:relative;
+
+    z-index:2;
 
     display:flex;
 
@@ -693,9 +900,7 @@ nav{
 }
 
 .tag{
-
-    padding:
-        7px 14px;
+    padding:7px 14px;
 
     border:
         1px solid #272727;
@@ -715,18 +920,14 @@ nav{
 }
 
 .tag:hover{
-
     color:white;
 
-    border-color:
-        var(--red);
+    border-color:var(--red);
 
     box-shadow:
-        0 0 20px
-        rgba(255,0,40,.2);
+        0 0 20px rgba(255,0,40,.2);
 
-    transform:
-        translateY(-3px);
+    transform:translateY(-3px);
 }
 
 
@@ -735,15 +936,12 @@ nav{
 ===================================================== */
 
 .section{
-
     width:min(1100px,92%);
 
-    margin:
-        120px auto;
+    margin:120px auto;
 }
 
 .section-title{
-
     text-align:center;
 
     font-family:'Orbitron';
@@ -767,7 +965,6 @@ nav{
 ===================================================== */
 
 .social-grid{
-
     display:grid;
 
     grid-template-columns:
@@ -777,7 +974,6 @@ nav{
 }
 
 .card{
-
     position:relative;
 
     min-height:190px;
@@ -802,11 +998,9 @@ nav{
 
     text-decoration:none;
 
-    backdrop-filter:
-        blur(15px);
+    backdrop-filter:blur(15px);
 
-    transform-style:
-        preserve-3d;
+    transform-style:preserve-3d;
 
     transition:
         border .25s,
@@ -814,7 +1008,6 @@ nav{
 }
 
 .card::before{
-
     content:"";
 
     position:absolute;
@@ -839,7 +1032,6 @@ nav{
 }
 
 .card:hover{
-
     border-color:
         rgba(255,0,40,.6);
 
@@ -849,7 +1041,6 @@ nav{
 }
 
 .number{
-
     font-family:'Share Tech Mono';
 
     font-size:10px;
@@ -858,7 +1049,6 @@ nav{
 }
 
 .icon{
-
     margin-top:32px;
 
     font-size:36px;
@@ -869,7 +1059,6 @@ nav{
 }
 
 .card:hover .icon{
-
     filter:none;
 
     transform:
@@ -878,7 +1067,6 @@ nav{
 }
 
 .card h3{
-
     margin-top:15px;
 
     font-family:'Orbitron';
@@ -890,7 +1078,6 @@ nav{
 }
 
 .card p{
-
     margin-top:5px;
 
     color:#666;
@@ -904,7 +1091,6 @@ nav{
 ===================================================== */
 
 .lock-box{
-
     width:min(650px,92%);
 
     margin:auto;
@@ -921,14 +1107,12 @@ nav{
     background:
         rgba(8,8,8,.78);
 
-    backdrop-filter:
-        blur(20px);
+    backdrop-filter:blur(20px);
 
     transition:.4s;
 }
 
 .lock-box:hover{
-
     border-color:
         rgba(255,0,40,.45);
 
@@ -937,20 +1121,17 @@ nav{
 }
 
 .lock{
-
     font-size:40px;
 
     margin-bottom:15px;
 
     filter:
         drop-shadow(
-            0 0 12px
-            rgba(255,0,40,.65)
+            0 0 12px rgba(255,0,40,.65)
         );
 }
 
 .lock-box h2{
-
     font-family:'Orbitron';
 
     font-size:16px;
@@ -959,7 +1140,6 @@ nav{
 }
 
 .lock-box p{
-
     color:#666;
 
     margin-top:10px;
@@ -970,11 +1150,9 @@ nav{
 }
 
 .input-wrap{
-
     max-width:440px;
 
-    margin:
-        25px auto 0;
+    margin:25px auto 0;
 
     display:flex;
 
@@ -982,7 +1160,6 @@ nav{
 }
 
 input{
-
     flex:1;
 
     padding:14px 16px;
@@ -1002,27 +1179,21 @@ input{
 }
 
 input:focus{
-
-    border-color:
-        var(--red);
+    border-color:var(--red);
 
     box-shadow:
-        0 0 20px
-        rgba(255,0,40,.12);
+        0 0 20px rgba(255,0,40,.12);
 }
 
 .unlock{
-
-    padding:
-        0 22px;
+    padding:0 22px;
 
     border:
         1px solid var(--red);
 
     border-radius:10px;
 
-    background:
-        transparent;
+    background:transparent;
 
     color:white;
 
@@ -1036,17 +1207,13 @@ input:focus{
 }
 
 .unlock:hover{
-
-    background:
-        var(--red);
+    background:var(--red);
 
     box-shadow:
-        0 0 25px
-        rgba(255,0,40,.5);
+        0 0 25px rgba(255,0,40,.5);
 }
 
 .result{
-
     min-height:25px;
 
     margin-top:18px;
@@ -1070,7 +1237,6 @@ input:focus{
 ===================================================== */
 
 .final{
-
     min-height:65vh;
 
     display:flex;
@@ -1078,22 +1244,117 @@ input:focus{
     flex-direction:column;
 
     align-items:center;
-
     justify-content:center;
 
     text-align:center;
 
     padding:100px 20px;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.final-media{
+    position:absolute;
+
+    z-index:-1;
+
+    width:min(820px,92vw);
+
+    height:min(520px,60vh);
+
+    top:50%;
+    left:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    overflow:hidden;
+
+    border-radius:26px;
+
+    opacity:.20;
+
+    filter:
+        saturate(.75)
+        contrast(1.15)
+        brightness(.46);
+
+    mask-image:
+        linear-gradient(
+            to bottom,
+            transparent,
+            #000 24%,
+            #000 76%,
+            transparent
+        );
+
+    -webkit-mask-image:
+        linear-gradient(
+            to bottom,
+            transparent,
+            #000 24%,
+            #000 76%,
+            transparent
+        );
+}
+
+.final-media::after{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 15%,
+            rgba(2,2,2,.76) 74%,
+            #020202 100%
+        ),
+        linear-gradient(
+            180deg,
+            #020202 0%,
+            transparent 25%,
+            transparent 75%,
+            #020202 100%
+        );
+
+    pointer-events:none;
+}
+
+.final-text{
+    position:relative;
+
+    z-index:2;
+
+    font-family:'Orbitron';
+
+    font-size:
+        clamp(18px,3vw,30px);
+
+    line-height:1.6;
+}
+
+.final-text span{
+    color:var(--red);
+
+    text-shadow:
+        0 0 15px rgba(255,0,40,.5);
 }
 
 .final-line{
+    position:relative;
+
+    z-index:2;
 
     width:100px;
 
     height:1px;
 
-    margin:
-        25px auto;
+    margin:25px auto;
 
     background:
         linear-gradient(
@@ -1107,33 +1368,13 @@ input:focus{
         0 0 12px var(--red);
 }
 
-.final-text{
-
-    font-family:'Orbitron';
-
-    font-size:
-        clamp(18px,3vw,30px);
-
-    line-height:1.6;
-}
-
-.final-text span{
-
-    color:var(--red);
-
-    text-shadow:
-        0 0 15px rgba(255,0,40,.5);
-}
-
 
 /* =====================================================
    FOOTER
 ===================================================== */
 
 footer{
-
-    padding:
-        80px 20px 40px;
+    padding:80px 20px 40px;
 
     text-align:center;
 
@@ -1150,7 +1391,6 @@ footer{
 }
 
 .footer-logo{
-
     font-family:'Orbitron';
 
     font-size:20px;
@@ -1173,14 +1413,12 @@ footer{
 
     from{
         opacity:0;
-        transform:
-            translateY(25px);
+        transform:translateY(25px);
     }
 
     to{
         opacity:1;
-        transform:
-            translateY(0);
+        transform:translateY(0);
     }
 
 }
@@ -1205,6 +1443,28 @@ footer{
     .social-grid{
         grid-template-columns:
             repeat(2,1fr);
+    }
+
+    .video-hero{
+        width:min(560px,96vw);
+
+        height:70vh;
+
+        top:45%;
+
+        opacity:.24;
+
+        filter:
+            saturate(.72)
+            contrast(1.12)
+            brightness(.52);
+    }
+
+    .video-mid-wrap{
+        height:
+            clamp(220px,55vw,340px);
+
+        margin-bottom:100px;
     }
 
 }
@@ -1244,12 +1504,47 @@ footer{
         padding:28px 20px;
     }
 
+    .video-hero{
+        width:94vw;
+
+        height:68vh;
+
+        top:45%;
+
+        border-radius:20px;
+
+        opacity:.21;
+    }
+
+    .video-mid-wrap{
+        width:92%;
+
+        height:260px;
+
+        border-radius:18px;
+
+        margin-bottom:85px;
+    }
+
+    .final{
+        min-height:58vh;
+    }
+
+    .final-media{
+        width:96vw;
+
+        height:55vh;
+
+        border-radius:20px;
+
+        opacity:.14;
+    }
+
 }
 
 </style>
 
 </head>
-
 
 <body>
 
@@ -1278,14 +1573,29 @@ footer{
      BLOOD
 ===================================================== -->
 
-<div class="blood" style="left:4%;height:100px;animation-duration:7s"></div>
-<div class="blood" style="left:13%;height:150px;animation-duration:11s"></div>
-<div class="blood" style="left:25%;height:80px;animation-duration:8s"></div>
-<div class="blood" style="left:39%;height:130px;animation-duration:12s"></div>
-<div class="blood" style="left:53%;height:90px;animation-duration:9s"></div>
-<div class="blood" style="left:68%;height:160px;animation-duration:13s"></div>
-<div class="blood" style="left:82%;height:100px;animation-duration:8s"></div>
-<div class="blood" style="left:94%;height:140px;animation-duration:10s"></div>
+<div class="blood"
+     style="left:4%;height:100px;animation-duration:7s"></div>
+
+<div class="blood"
+     style="left:13%;height:150px;animation-duration:11s"></div>
+
+<div class="blood"
+     style="left:25%;height:80px;animation-duration:8s"></div>
+
+<div class="blood"
+     style="left:39%;height:130px;animation-duration:12s"></div>
+
+<div class="blood"
+     style="left:53%;height:90px;animation-duration:9s"></div>
+
+<div class="blood"
+     style="left:68%;height:160px;animation-duration:13s"></div>
+
+<div class="blood"
+     style="left:82%;height:100px;animation-duration:8s"></div>
+
+<div class="blood"
+     style="left:94%;height:140px;animation-duration:10s"></div>
 
 
 <!-- =====================================================
@@ -1311,6 +1621,27 @@ footer{
 
 <section class="hero" id="hero">
 
+    <div class="video-hero" aria-hidden="true">
+
+        <video
+            class="cinematic-video"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+        >
+
+            <source
+                src="Late night dreams.mp4"
+                type="video/mp4"
+            >
+
+        </video>
+
+    </div>
+
+
     <div class="mini">
         // WELCOME TO MY WORLD
     </div>
@@ -1330,12 +1661,12 @@ footer{
 
         <div class="quote">
 
-            I'm a Senior Global Financial Markets Risk Assessment & Strategic Capital Allocation Specialist
+            I'm a Senior Global Financial Markets RiskLikes Assessment & Strategic Capital Allocation Specialist,
 
             <br>
 
             <span>
-                I speak less, observe more, and move with intention...
+                navigating risk, capital, and opportunity through chaos and silence.
             </span>
 
         </div>
@@ -1344,7 +1675,9 @@ footer{
         <div class="description">
 
             Not everything needs to be explained.
+
             <br>
+
             Some things are better left unknown.
 
         </div>
@@ -1399,12 +1732,11 @@ footer{
     <div class="social-grid">
 
 
-        <!-- FACEBOOK -->
-
         <a
             class="card tilt"
             href="https://www.facebook.com/sn.x.rimon"
             target="_blank"
+            rel="noopener noreferrer"
         >
 
             <div class="number">
@@ -1426,12 +1758,11 @@ footer{
         </a>
 
 
-        <!-- INSTAGRAM -->
-
         <a
             class="card tilt"
             href="https://www.instagram.com/snrx.exe/"
             target="_blank"
+            rel="noopener noreferrer"
         >
 
             <div class="number">
@@ -1453,11 +1784,11 @@ footer{
         </a>
 
 
-        <!-- DISCORD -->
-
         <div
             class="card tilt"
             onclick="copyDiscord()"
+            role="button"
+            tabindex="0"
         >
 
             <div class="number">
@@ -1479,11 +1810,11 @@ footer{
         </div>
 
 
-        <!-- WHATSAPP -->
-
         <div
             class="card tilt"
             onclick="goWhatsApp()"
+            role="button"
+            tabindex="0"
         >
 
             <div class="number">
@@ -1507,6 +1838,62 @@ footer{
     </div>
 
 </section>
+
+
+<!-- =====================================================
+     CINEMATIC TRANSITION 1
+===================================================== -->
+
+<div
+    class="video-mid-wrap"
+    aria-hidden="true"
+>
+
+    <video
+        class="cinematic-video video-mid"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+    >
+
+        <source
+            src="snrx-hero.mp4"
+            type="video/mp4"
+        >
+
+    </video>
+
+</div>
+
+
+<!-- =====================================================
+     CINEMATIC TRANSITION 2
+===================================================== -->
+
+<div
+    class="video-mid-wrap video-mid-bmw"
+    aria-hidden="true"
+>
+
+    <video
+        class="cinematic-video video-mid"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+    >
+
+        <source
+            src="snrx-bmw.mp4"
+            type="video/mp4"
+        >
+
+    </video>
+
+</div>
 
 
 <!-- =====================================================
@@ -1544,6 +1931,7 @@ footer{
         <p>
 
             This information is locked.
+
             <br>
 
             Enter the correct password to reveal it.
@@ -1634,23 +2022,34 @@ footer{
 ===================================================== */
 
 const cursor =
-document.querySelector(".cursor");
+    document.querySelector(".cursor");
 
 const ring =
-document.querySelector(".cursor-ring");
+    document.querySelector(".cursor-ring");
 
 const glow =
-document.querySelector(".cursor-glow");
+    document.querySelector(".cursor-glow");
+
 
 let mouseX =
-window.innerWidth / 2;
+    window.innerWidth / 2;
 
 let mouseY =
-window.innerHeight / 2;
+    window.innerHeight / 2;
+
 
 let ringX = mouseX;
 let ringY = mouseY;
 
+
+/*
+   IMPORTANT FIX
+
+   Instead of changing left/top on every mousemove,
+   the cursor now uses translate3d().
+   This gives smoother movement and avoids
+   positioning/stacking problems.
+*/
 
 document.addEventListener(
     "mousemove",
@@ -1660,19 +2059,29 @@ document.addEventListener(
         mouseY = e.clientY;
 
 
-        cursor.style.left =
-            mouseX + "px";
+        /* Main white cursor */
 
-        cursor.style.top =
-            mouseY + "px";
+        cursor.style.transform =
+            `translate3d(
+                ${mouseX}px,
+                ${mouseY}px,
+                0
+            )
+            translate(-50%, -50%)`;
 
 
-        glow.style.left =
-            mouseX + "px";
+        /* Large red glow */
 
-        glow.style.top =
-            mouseY + "px";
+        glow.style.transform =
+            `translate3d(
+                ${mouseX}px,
+                ${mouseY}px,
+                0
+            )
+            translate(-50%, -50%)`;
 
+
+        /* Background follows cursor */
 
         document.body.style.setProperty(
             "--mouseX",
@@ -1684,6 +2093,8 @@ document.addEventListener(
             mouseY + "px"
         );
 
+
+        /* Small particles */
 
         if(Math.random() > .75){
 
@@ -1698,6 +2109,10 @@ document.addEventListener(
 );
 
 
+/* =====================================================
+   SMOOTH CURSOR RING
+===================================================== */
+
 function animateCursor(){
 
     ringX +=
@@ -1707,16 +2122,19 @@ function animateCursor(){
         (mouseY - ringY) * .15;
 
 
-    ring.style.left =
-        ringX + "px";
-
-    ring.style.top =
-        ringY + "px";
+    ring.style.transform =
+        `translate3d(
+            ${ringX}px,
+            ${ringY}px,
+            0
+        )
+        translate(-50%, -50%)`;
 
 
     requestAnimationFrame(
         animateCursor
     );
+
 }
 
 animateCursor();
@@ -1828,7 +2246,9 @@ document.addEventListener(
         );
 
     },
-    {passive:true}
+    {
+        passive:true
+    }
 );
 
 
@@ -1916,10 +2336,10 @@ document
 ===================================================== */
 
 const hero =
-document.getElementById("hero");
+    document.getElementById("hero");
 
 const logo =
-document.getElementById("logo");
+    document.getElementById("logo");
 
 
 document.addEventListener(
@@ -2014,6 +2434,27 @@ function goWhatsApp(){
 
 
 /* =====================================================
+   DISCORD
+===================================================== */
+
+function copyDiscord(){
+
+    const discord =
+        "snrx.exe";
+
+
+    if(navigator.clipboard){
+
+        navigator.clipboard.writeText(
+            discord
+        );
+
+    }
+
+}
+
+
+/* =====================================================
    WHATSAPP PASSWORD
 ===================================================== */
 
@@ -2070,7 +2511,9 @@ function unlockWhatsApp(){
         result.innerHTML =
             `
             ✕ ACCESS DENIED
+
             <br>
+
             WRONG PASSWORD
             `;
 
@@ -2146,6 +2589,7 @@ document.addEventListener(
                     document.body.style.filter =
                         "";
 
+
                     logo.style.textShadow =
                         `
                         3px 3px 0 var(--red),
@@ -2192,6 +2636,41 @@ setInterval(
 
 
 /* =====================================================
+   VIDEO AUTOPLAY SAFETY
+===================================================== */
+
+document
+.querySelectorAll("video")
+.forEach(function(video){
+
+    video.muted = true;
+
+
+    const playPromise =
+        video.play();
+
+
+    if(
+        playPromise !== undefined
+    ){
+
+        playPromise.catch(
+            function(){
+
+                /*
+                   Browser autoplay policy may
+                   require the first user gesture.
+                */
+
+            }
+        );
+
+    }
+
+});
+
+
+/* =====================================================
    CONSOLE
 ===================================================== */
 
@@ -2205,7 +2684,7 @@ console.log(
 ╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝
 
 SNRX.EXE
-PROFILE SYSTEM ONLINE.
+SYSTEM ONLINE
 `
 );
 
@@ -2213,3 +2692,13 @@ PROFILE SYSTEM ONLINE.
 
 </body>
 </html>
+```
+
+**এই version-এ cursor-এর ৩টা জিনিসই fix করা হয়েছে:**
+
+* ⚪ white cursor dot mouse-এর সাথে সরবে
+* 🔴 red ring smooth-follow করবে
+* 🔴 বড় red glow mouse-এর সাথে থাকবে
+* Scanline layer cursor-কে আর ঢেকে দেবে না
+* Desktop-এ custom cursor থাকবে, mobile-এ native cursor থাকবে
+* তোমার video, password, Discord, cards, glitch—সব আগের মতোই আছে।
