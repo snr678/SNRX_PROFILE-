@@ -41,31 +41,33 @@ body{
     color:white;
     font-family:'Rajdhani',sans-serif;
     overflow-x:hidden;
-
-    /* IMPORTANT:
-       Hide the native cursor only on desktop.
-       Custom cursor is handled below.
-    */
     cursor:none;
 }
 
 
 /* =====================================================
-   SCARY POP-UP NOTICE (5 SECONDS)
+   SCARY POP-UP NOTICE
 ===================================================== */
 
 .scary-popup-overlay{
     position:fixed;
     inset:0;
     z-index:999999;
-    background:rgba(0, 0, 0, 0.92);
+
+    background:rgba(0,0,0,.92);
+
     backdrop-filter:blur(10px);
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     opacity:1;
     visibility:visible;
-    transition:opacity .6s ease, visibility .6s ease;
+
+    transition:
+        opacity .6s ease,
+        visibility .6s ease;
 }
 
 .scary-popup-overlay.hide{
@@ -75,42 +77,66 @@ body{
 }
 
 .scary-popup-box{
-    width:min(450px, 90vw);
+    width:min(450px,90vw);
+
     padding:35px 25px;
+
     background:#080002;
+
     border:2px solid var(--red);
+
     border-radius:16px;
+
     text-align:center;
+
     box-shadow:
-        0 0 30px rgba(255, 0, 68, 0.6),
-        inset 0 0 20px rgba(255, 0, 68, 0.3);
+        0 0 30px rgba(255,0,68,.6),
+        inset 0 0 20px rgba(255,0,68,.3);
+
     position:relative;
+
     animation:popupPulse 1.5s infinite alternate;
 }
 
 @keyframes popupPulse{
+
     from{
-        box-shadow:0 0 20px rgba(255, 0, 68, 0.4), inset 0 0 15px rgba(255, 0, 68, 0.2);
+        box-shadow:
+            0 0 20px rgba(255,0,68,.4),
+            inset 0 0 15px rgba(255,0,68,.2);
     }
+
     to{
-        box-shadow:0 0 45px rgba(255, 0, 68, 0.8), inset 0 0 30px rgba(255, 0, 68, 0.5);
+        box-shadow:
+            0 0 45px rgba(255,0,68,.8),
+            inset 0 0 30px rgba(255,0,68,.5);
     }
+
 }
 
 .scary-title{
-    font-family:'Creepster', cursive;
+    font-family:'Creepster',cursive;
+
     font-size:32px;
+
     color:var(--red);
+
     letter-spacing:3px;
+
     text-shadow:0 0 10px var(--red);
+
     margin-bottom:12px;
 }
 
 .scary-text{
-    font-family:'Share Tech Mono', monospace;
+    font-family:'Share Tech Mono',monospace;
+
     font-size:14px;
+
     color:#ccc;
+
     line-height:1.6;
+
     margin-bottom:25px;
 }
 
@@ -121,31 +147,38 @@ body{
 
 .scary-btn{
     display:inline-block;
+
     padding:12px 28px;
+
     background:var(--red);
+
     color:white;
-    font-family:'Orbitron', sans-serif;
+
+    font-family:'Orbitron',sans-serif;
+
     font-size:12px;
+
     font-weight:bold;
+
     letter-spacing:2px;
+
     border:none;
+
     border-radius:8px;
+
     cursor:pointer;
-    box-shadow:0 0 20px rgba(255, 0, 68, 0.6);
+
+    box-shadow:0 0 20px rgba(255,0,68,.6);
+
     transition:.3s;
 }
 
 .scary-btn:hover{
     background:#fff;
-    color:var(--red);
-    box-shadow:0 0 30px #fff;
-}
 
-.scary-timer{
-    margin-top:15px;
-    font-family:'Share Tech Mono';
-    font-size:11px;
-    color:#666;
+    color:var(--red);
+
+    box-shadow:0 0 30px #fff;
 }
 
 
@@ -156,7 +189,6 @@ body{
 .cursor{
     position:fixed;
 
-    /* Start position */
     left:0;
     top:0;
 
@@ -169,11 +201,11 @@ body{
 
     pointer-events:none;
 
-    /* Must stay above EVERYTHING */
     z-index:100000;
 
-    /* Movement is done with transform */
-    transform:translate3d(-100px,-100px,0) translate(-50%,-50%);
+    transform:
+        translate3d(-100px,-100px,0)
+        translate(-50%,-50%);
 
     box-shadow:
         0 0 8px #ffffff,
@@ -193,13 +225,16 @@ body{
     height:38px;
 
     border:1px solid rgba(255,23,68,.75);
+
     border-radius:50%;
 
     pointer-events:none;
 
     z-index:99999;
 
-    transform:translate3d(-100px,-100px,0) translate(-50%,-50%);
+    transform:
+        translate3d(-100px,-100px,0)
+        translate(-50%,-50%);
 
     transition:
         width .2s ease,
@@ -224,7 +259,9 @@ body{
 
     z-index:9998;
 
-    transform:translate3d(-100px,-100px,0) translate(-50%,-50%);
+    transform:
+        translate3d(-100px,-100px,0)
+        translate(-50%,-50%);
 
     background:
         radial-gradient(
@@ -245,11 +282,11 @@ body::after{
     content:"";
 
     position:fixed;
+
     inset:0;
 
     pointer-events:none;
 
-    /* Lower than custom cursor */
     z-index:9990;
 
     background:
@@ -273,26 +310,31 @@ body::before{
     content:"";
 
     position:fixed;
+
     inset:0;
 
     z-index:-10;
 
     background:
+
         radial-gradient(
             circle at var(--mouseX,50%) var(--mouseY,50%),
             rgba(255,0,40,.10),
             transparent 24%
         ),
+
         radial-gradient(
             circle at 50% 15%,
             rgba(255,0,40,.09),
             transparent 35%
         ),
+
         radial-gradient(
             circle at 10% 90%,
             rgba(255,0,40,.05),
             transparent 30%
         ),
+
         #020202;
 }
 
@@ -341,6 +383,7 @@ body::before{
     position:fixed;
 
     height:1px;
+
     width:0;
 
     pointer-events:none;
@@ -420,7 +463,9 @@ body.scrolling .aura-middle{
 
 body.scrolling .aura-particle{
     opacity:1;
-    animation:auraMove 1.8s linear infinite;
+
+    animation:
+        auraMove 1.8s linear infinite;
 }
 
 @keyframes auraMove{
@@ -464,6 +509,7 @@ body.scrolling .aura-particle{
     0%{
         width:10px;
         height:10px;
+
         opacity:1;
 
         box-shadow:
@@ -473,6 +519,7 @@ body.scrolling .aura-particle{
     100%{
         width:190px;
         height:190px;
+
         opacity:0;
 
         box-shadow:
@@ -684,9 +731,11 @@ nav{
     content:"";
 
     position:absolute;
+
     inset:0;
 
     background:
+
         linear-gradient(
             90deg,
             rgba(2,2,2,.94) 0%,
@@ -694,6 +743,7 @@ nav{
             rgba(2,2,2,.30) 62%,
             rgba(2,2,2,.96) 100%
         ),
+
         linear-gradient(
             180deg,
             rgba(2,2,2,.8),
@@ -748,6 +798,7 @@ nav{
     content:"";
 
     position:absolute;
+
     inset:0;
 
     z-index:2;
@@ -755,6 +806,7 @@ nav{
     pointer-events:none;
 
     background:
+
         linear-gradient(
             90deg,
             rgba(2,2,2,.72),
@@ -762,6 +814,7 @@ nav{
             transparent 72%,
             rgba(2,2,2,.76)
         ),
+
         linear-gradient(
             180deg,
             rgba(2,2,2,.6),
@@ -793,7 +846,7 @@ nav{
     margin-bottom:125px;
 }
 
-@media (max-width:850px){
+@media(max-width:850px){
 
     .video-mid-bmw{
         margin-bottom:100px;
@@ -801,7 +854,7 @@ nav{
 
 }
 
-@media (max-width:550px){
+@media(max-width:550px){
 
     .video-mid-bmw{
         margin-bottom:85px;
@@ -1406,12 +1459,14 @@ input:focus{
     inset:0;
 
     background:
+
         radial-gradient(
             ellipse at center,
             transparent 15%,
             rgba(2,2,2,.76) 74%,
             #020202 100%
         ),
+
         linear-gradient(
             180deg,
             #020202 0%,
@@ -1646,20 +1701,40 @@ footer{
 
 <body>
 
+
 <!-- =====================================================
      SCARY POP-UP NOTICE
 ===================================================== -->
 
 <div class="scary-popup-overlay" id="popupOverlay">
+
     <div class="scary-popup-box">
-        <div class="scary-title">⚠️ SYSTEM WARNING ⚠️</div>
-        <div class="scary-text">
-            <span>UNAUTHORIZED ACCESS DETECTED!</span><br><br>
-            Click anywhere on the screen or press the button below to initialize system audio.
+
+        <div class="scary-title">
+            ⚠️ SYSTEM WARNING ⚠️
         </div>
-        <button class="scary-btn" onclick="startAudio()">ENTER THE REALM</button>
-        <div class="scary-timer">Auto closing in <span id="timerText">5</span>s...</div>
+
+        <div class="scary-text">
+
+            <span>
+                UNAUTHORIZED ACCESS DETECTED!
+            </span>
+
+            <br><br>
+
+            Click anywhere on the screen or press the button below to initialize system audio.
+
+        </div>
+
+        <button
+            class="scary-btn"
+            id="startAudioButton"
+        >
+            ENTER THE REALM
+        </button>
+
     </div>
+
 </div>
 
 
@@ -1667,8 +1742,17 @@ footer{
      BACKGROUND AUDIO
 ===================================================== -->
 
-<audio id="bg-audio" loop preload="auto">
-    <source src="timeless_weeknd.mp3" type="audio/mpeg">
+<audio
+    id="bg-audio"
+    loop
+    preload="auto"
+>
+
+    <source
+        src="timeless_weeknd.mp3"
+        type="audio/mpeg"
+    >
+
 </audio>
 
 
@@ -1677,7 +1761,9 @@ footer{
 ===================================================== -->
 
 <div class="aura-line aura-left"></div>
+
 <div class="aura-line aura-right"></div>
+
 <div class="aura-line aura-middle"></div>
 
 <div class="aura-particle"></div>
@@ -1688,7 +1774,9 @@ footer{
 ===================================================== -->
 
 <div class="cursor"></div>
+
 <div class="cursor-ring"></div>
+
 <div class="cursor-glow"></div>
 
 
@@ -1696,29 +1784,45 @@ footer{
      BLOOD
 ===================================================== -->
 
-<div class="blood"
-     style="left:4%;height:100px;animation-duration:7s"></div>
+<div
+    class="blood"
+    style="left:4%;height:100px;animation-duration:7s"
+></div>
 
-<div class="blood"
-     style="left:13%;height:150px;animation-duration:11s"></div>
+<div
+    class="blood"
+    style="left:13%;height:150px;animation-duration:11s"
+></div>
 
-<div class="blood"
-     style="left:25%;height:80px;animation-duration:8s"></div>
+<div
+    class="blood"
+    style="left:25%;height:80px;animation-duration:8s"
+></div>
 
-<div class="blood"
-     style="left:39%;height:130px;animation-duration:12s"></div>
+<div
+    class="blood"
+    style="left:39%;height:130px;animation-duration:12s"
+></div>
 
-<div class="blood"
-     style="left:53%;height:90px;animation-duration:9s"></div>
+<div
+    class="blood"
+    style="left:53%;height:90px;animation-duration:9s"
+></div>
 
-<div class="blood"
-     style="left:68%;height:160px;animation-duration:13s"></div>
+<div
+    class="blood"
+    style="left:68%;height:160px;animation-duration:13s"
+></div>
 
-<div class="blood"
-     style="left:82%;height:100px;animation-duration:8s"></div>
+<div
+    class="blood"
+    style="left:82%;height:100px;animation-duration:8s"
+></div>
 
-<div class="blood"
-     style="left:94%;height:140px;animation-duration:10s"></div>
+<div
+    class="blood"
+    style="left:94%;height:140px;animation-duration:10s"
+></div>
 
 
 <!-- =====================================================
@@ -1728,11 +1832,15 @@ footer{
 <nav>
 
     <div class="nav-logo">
+
         SNRX<span>.</span>EXE
+
     </div>
 
     <div class="status">
+
         PROFILE SYSTEM ONLINE
+
     </div>
 
 </nav>
@@ -1742,9 +1850,15 @@ footer{
      HERO
 ===================================================== -->
 
-<section class="hero" id="hero">
+<section
+    class="hero"
+    id="hero"
+>
 
-    <div class="video-hero" aria-hidden="true">
+    <div
+        class="video-hero"
+        aria-hidden="true"
+    >
 
         <video
             class="cinematic-video"
@@ -1766,17 +1880,26 @@ footer{
 
 
     <div class="mini">
+
         // WELCOME TO MY WORLD
+
     </div>
 
 
-    <div class="logo" id="logo">
+    <div
+        class="logo"
+        id="logo"
+    >
+
         SNRX
+
     </div>
 
 
     <div class="tagline">
+
         LOST / UNKNOWN / <span>UNSEEN</span>
+
     </div>
 
 
@@ -1784,12 +1907,12 @@ footer{
 
         <div class="quote">
 
-            I'm a Senior Global Financial Markets Risk Assessment & Strategic Capital Allocation Specialist,
+            I'm a Senior Global Financial Markets RiskLikes Assessment & Strategic Capital Allocation Specialist,
 
             <br>
 
             <span>
-                I speak less, observe more, and move with intention...
+                navigating risk, capital, and opportunity through chaos and silence.
             </span>
 
         </div>
@@ -2076,7 +2199,9 @@ footer{
                 class="unlock"
                 onclick="unlockWhatsApp()"
             >
+
                 UNLOCK
+
             </button>
 
         </div>
@@ -2114,7 +2239,9 @@ footer{
 
 
     <div class="tagline">
+
         — SNRX —
+
     </div>
 
 </section>
@@ -2127,7 +2254,9 @@ footer{
 <footer>
 
     <div class="footer-logo">
+
         SNRX<span>.</span>EXE
+
     </div>
 
     © 2026 SNRX.EXE
@@ -2141,42 +2270,158 @@ footer{
 
 /* =====================================================
    POP-UP & AUDIO CONTROL
+   FIXED FOR DESKTOP + MOBILE
 ===================================================== */
 
-const audio = document.getElementById("bg-audio");
-const popupOverlay = document.getElementById("popupOverlay");
-const timerText = document.getElementById("timerText");
+const audio =
+    document.getElementById("bg-audio");
 
-let countdown = 5;
+const popupOverlay =
+    document.getElementById("popupOverlay");
+
+const startAudioButton =
+    document.getElementById("startAudioButton");
+
+
 let audioStarted = false;
 
-// Function to start audio & hide popup
-function startAudio() {
-    if(!audioStarted) {
-        audioStarted = true;
-        if(audio){
-            audio.play().catch(e => console.log("Audio play blocked", e));
-        }
-        if(popupOverlay){
-            popupOverlay.classList.add("hide");
-        }
-    }
-}
-   
-// Countdown Timer for Pop-up (5 seconds)
-const timerInterval = setInterval(() => {
-    countdown--;
-    if(timerText) timerText.textContent = countdown;
-    
-    if(countdown <= 0) {
-        clearInterval(timerInterval);
-        startAudio();
-    }
-}, 1000);
 
-// Global click/touch listener to trigger sound immediately
-window.addEventListener("click", startAudio);
-window.addEventListener("touchstart", startAudio);
+/*
+   Start audio only from a real user interaction.
+   This is important because mobile browsers
+   block autoplay without user interaction.
+*/
+
+function startAudio(){
+
+    if(audioStarted){
+        return;
+    }
+
+
+    if(!audio){
+        return;
+    }
+
+
+    audio.currentTime = 0;
+
+
+    const playPromise =
+        audio.play();
+
+
+    if(playPromise !== undefined){
+
+        playPromise
+            .then(function(){
+
+                audioStarted = true;
+
+                console.log(
+                    "SNRX audio started successfully."
+                );
+
+
+                if(popupOverlay){
+
+                    popupOverlay.classList.add(
+                        "hide"
+                    );
+
+                }
+
+            })
+            .catch(function(error){
+
+                /*
+                   Browser blocked playback.
+                   Keep popup open and allow
+                   another user interaction.
+                */
+
+                audioStarted = false;
+
+                console.log(
+                    "Audio playback blocked:",
+                    error
+                );
+
+            });
+
+    }
+
+    else{
+
+        audioStarted = true;
+
+        if(popupOverlay){
+
+            popupOverlay.classList.add(
+                "hide"
+            );
+
+        }
+
+    }
+
+}
+
+
+/*
+   Popup button.
+   pointerdown works on both desktop and mobile.
+*/
+
+if(startAudioButton){
+
+    startAudioButton.addEventListener(
+        "pointerdown",
+        function(e){
+
+            e.preventDefault();
+
+            e.stopPropagation();
+
+            startAudio();
+
+        },
+        {
+            passive:false
+        }
+    );
+
+}
+
+
+/*
+   Click / tap anywhere on the page.
+   The first real pointer interaction starts audio.
+*/
+
+document.addEventListener(
+    "pointerdown",
+    function(e){
+
+        /*
+           Ignore the popup button here because
+           it already has its own handler.
+        */
+
+        if(
+            startAudioButton &&
+            startAudioButton.contains(e.target)
+        ){
+            return;
+        }
+
+        startAudio();
+
+    },
+    {
+        passive:true
+    }
+);
 
 
 /* =====================================================
@@ -2199,29 +2444,21 @@ let mouseX =
 let mouseY =
     window.innerHeight / 2;
 
-
 let ringX = mouseX;
+
 let ringY = mouseY;
 
-
-/*
-   IMPORTANT FIX
-
-   Instead of changing left/top on every mousemove,
-   the cursor now uses translate3d().
-   This gives smoother movement and avoids
-   positioning/stacking problems.
-*/
 
 document.addEventListener(
     "mousemove",
     function(e){
 
         mouseX = e.clientX;
+
         mouseY = e.clientY;
 
 
-        /* Main white cursor */
+        /* Main cursor */
 
         cursor.style.transform =
             `translate3d(
@@ -2232,7 +2469,7 @@ document.addEventListener(
             translate(-50%, -50%)`;
 
 
-        /* Large red glow */
+        /* Red glow */
 
         glow.style.transform =
             `translate3d(
@@ -2243,7 +2480,7 @@ document.addEventListener(
             translate(-50%, -50%)`;
 
 
-        /* Background follows cursor */
+        /* Background mouse position */
 
         document.body.style.setProperty(
             "--mouseX",
@@ -2256,7 +2493,7 @@ document.addEventListener(
         );
 
 
-        /* Small particles */
+        /* Particles */
 
         if(Math.random() > .75){
 
@@ -2338,7 +2575,11 @@ function createParticle(x,y){
 
 
     setTimeout(
-        () => p.remove(),
+        function(){
+
+            p.remove();
+
+        },
         650
     );
 
@@ -2371,7 +2612,11 @@ function shockwave(x,y){
 
 
     setTimeout(
-        () => ripple.remove(),
+        function(){
+
+            ripple.remove();
+
+        },
         700
     );
 
@@ -2402,10 +2647,14 @@ document.addEventListener(
         const touch =
             e.touches[0];
 
-        shockwave(
-            touch.clientX,
-            touch.clientY
-        );
+        if(touch){
+
+            shockwave(
+                touch.clientX,
+                touch.clientY
+            );
+
+        }
 
     },
     {
@@ -2508,8 +2757,9 @@ document.addEventListener(
     "mousemove",
     function(e){
 
-        if(window.innerWidth < 850)
+        if(window.innerWidth < 850){
             return;
+        }
 
 
         const x =
@@ -2662,8 +2912,8 @@ function unlockWhatsApp(){
 
 
         shockwave(
-            window.innerWidth/2,
-            window.innerHeight/2
+            window.innerWidth / 2,
+            window.innerHeight / 2
         );
 
     }
@@ -2820,8 +3070,8 @@ document
             function(){
 
                 /*
-                   Browser autoplay policy may
-                   require the first user gesture.
+                   Muted videos are normally
+                   allowed to autoplay.
                 */
 
             }
