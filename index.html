@@ -1752,7 +1752,6 @@ letter-spacing:inherit;animation:rgbSplit 6s infinite steps(1)}
 background:#080002;border:1px solid var(--red);color:#fff;font-family:'Share Tech Mono';font-size:13px;letter-spacing:2px;
 box-shadow:0 0 24px rgba(255,23,68,.5);opacity:0;pointer-events:none;transition:.35s}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-.dock{display:none}
 
 /* ===== touch devices ===== */
 @media(hover:none){
@@ -1776,17 +1775,35 @@ body::after{opacity:.14}
 .section-title{font-size:clamp(15px,4.4vw,20px)}
 .hero{padding-top:96px}
 .unlock,.input-wrap input{min-height:50px;font-size:16px}
-footer{padding-bottom:112px}
+footer{padding-bottom:90px}
 .toast{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
-.dock{display:flex;position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:600;gap:4px;padding:8px;
-border-radius:22px;background:rgba(8,0,2,.8);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-border:1px solid rgba(255,23,68,.4);box-shadow:0 8px 30px rgba(0,0,0,.6),0 0 24px rgba(255,23,68,.25);
-transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .35s;height:auto;width:auto}
-.dock.hide{transform:translate(-50%,150%);opacity:0}
-.dock a{width:48px;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:14px;
 color:#eee;text-decoration:none;font-family:'Orbitron';font-size:16px;line-height:1;-webkit-tap-highlight-color:transparent;transition:background .2s,transform .15s}
-.dock a small{font-size:8px;margin-top:4px;letter-spacing:1px;color:#8a8a8a;font-family:'Share Tech Mono'}
-.dock a:active{background:var(--red);transform:scale(.88)}
+}
+
+/* ===== connect FAB + sheet (phones only) ===== */
+.fab,.sheet,.sheet-bg{display:none}
+@media(max-width:700px){
+.fab{display:flex;align-items:center;gap:9px;position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:600;
+height:44px;padding:0 18px;border:1px solid rgba(255,23,68,.7);border-radius:999px;background:rgba(8,0,2,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+color:#fff;font-family:'Orbitron';font-size:10px;font-weight:700;letter-spacing:2.5px;box-shadow:0 0 22px rgba(255,23,68,.35);
+opacity:0;transform:translateY(24px) scale(.9);pointer-events:none;transition:opacity .4s,transform .45s cubic-bezier(.2,.7,.2,1);-webkit-tap-highlight-color:transparent}
+.fab.show{opacity:1;transform:none;pointer-events:auto}
+.fab:active{transform:scale(.93)}
+.fab i{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:livePulse 1.4s infinite}
+.sheet-bg{display:block;position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .35s}
+.sheet-bg.open{opacity:1;pointer-events:auto}
+.sheet{display:block;position:fixed;left:0;right:0;bottom:0;z-index:701;padding:12px 18px calc(26px + env(safe-area-inset-bottom,0px));
+background:#080002;border-top:1px solid var(--red);border-radius:24px 24px 0 0;box-shadow:0 -10px 50px rgba(255,23,68,.25);
+transform:translateY(105%);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.sheet.open{transform:none}
+.grab{width:44px;height:4px;margin:0 auto 16px;border-radius:4px;background:#3a3a3a}
+.sheet-title{margin-bottom:16px;text-align:center;font-family:'Share Tech Mono';font-size:11px;letter-spacing:5px;color:#777}
+.sheet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sheet-grid a{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 6px;border:1px solid rgba(255,23,68,.28);border-radius:16px;
+background:rgba(255,23,68,.05);color:#eee;text-decoration:none;font-family:'Orbitron';font-size:10px;letter-spacing:1px;-webkit-tap-highlight-color:transparent;transition:transform .15s,background .2s}
+.sheet-grid a b{font-size:24px;line-height:1;color:var(--red);font-weight:700}
+.sheet-grid a:active{background:var(--red);transform:scale(.94)}
+.sheet-grid a:active b{color:#fff}
 }
 
 </style>
@@ -2361,14 +2378,20 @@ color:#eee;text-decoration:none;font-family:'Orbitron';font-size:16px;line-heigh
      FOOTER
 ===================================================== -->
 
-<nav class="dock" id="dock" aria-label="Quick connect">
-    <a href="https://www.facebook.com/sn.x.rimon" target="_blank" rel="noopener noreferrer"><span>f</span><small>FB</small></a>
-    <a href="https://www.instagram.com/snrx.exe/" target="_blank" rel="noopener noreferrer"><span>◎</span><small>IG</small></a>
-    <a href="https://www.threads.com/@snrx.exe" target="_blank" rel="noopener noreferrer"><span>@</span><small>TH</small></a>
-    <a href="https://x.com/snrx_exe" target="_blank" rel="noopener noreferrer"><span>✕</span><small>X</small></a>
-    <a href="#" data-act="discord"><span>◉</span><small>DC</small></a>
-    <a href="#whatsapp"><span>🔒</span><small>WA</small></a>
-</nav>
+<button class="fab" id="fab" aria-label="Open connect menu" aria-expanded="false"><i></i>CONNECT</button>
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-label="Connect">
+    <div class="grab"></div>
+    <div class="sheet-title">CHOOSE A CHANNEL</div>
+    <div class="sheet-grid">
+        <a href="https://www.facebook.com/sn.x.rimon" target="_blank" rel="noopener noreferrer"><b>f</b>Facebook</a>
+        <a href="https://www.instagram.com/snrx.exe/" target="_blank" rel="noopener noreferrer"><b>◎</b>Instagram</a>
+        <a href="https://www.threads.com/@snrx.exe" target="_blank" rel="noopener noreferrer"><b>@</b>Threads</a>
+        <a href="https://x.com/snrx_exe" target="_blank" rel="noopener noreferrer"><b>✕</b>X</a>
+        <a href="#" data-act="discord"><b>◉</b>Discord</a>
+        <a href="#whatsapp"><b>🔒</b>WhatsApp</a>
+    </div>
+</div>
 
 <footer>
 
@@ -3369,28 +3392,37 @@ function say(msg){
     clearTimeout(tt); tt = setTimeout(function(){ toast.classList.remove("show"); }, 1800);
 }
 
-/* discord copy with feedback (card + dock) */
+/* discord copy with feedback (card + sheet) */
 const baseCopy = window.copyDiscord;
 window.copyDiscord = function(){ baseCopy(); vib(20); say("COPIED // snrx.exe"); };
 document.querySelector('[data-act="discord"]').addEventListener("click", function(e){
     e.preventDefault(); window.copyDiscord();
 });
 
-/* haptic tap on cards, dock and buttons */
-document.querySelectorAll(".card,.dock a,.unlock,.scary-btn").forEach(function(el){
+/* haptic tap on cards, sheet and buttons */
+document.querySelectorAll(".card,.sheet-grid a,.unlock,.scary-btn").forEach(function(el){
     el.addEventListener("click", function(){ vib(10); });
 });
 
-/* dock: hide on scroll down, show on scroll up, hide while typing */
-const dock = document.getElementById("dock");
-let last = scrollY;
-addEventListener("scroll", function(){
-    const y = scrollY;
-    if(Math.abs(y - last) > 8){ dock.classList.toggle("hide", y > last && y > 120); last = y; }
-}, {passive:true});
+/* connect FAB + bottom sheet (appears only after the hero) */
+const fab = document.getElementById("fab"), sheet = document.getElementById("sheet"), bg = document.getElementById("sheetBg");
+function openSheet(o){
+    sheet.classList.toggle("open", o); bg.classList.toggle("open", o);
+    fab.setAttribute("aria-expanded", o); document.body.style.overflow = o ? "hidden" : "";
+    if(o) vib(14);
+}
+function fabState(){ fab.classList.toggle("show", scrollY > innerHeight * .9 && !sheet.classList.contains("open")); }
+addEventListener("scroll", fabState, {passive:true}); fabState();
+fab.addEventListener("click", function(){ openSheet(true); fabState(); });
+bg.addEventListener("click", function(){ openSheet(false); fabState(); });
+sheet.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", function(){ openSheet(false); fabState(); }); });
+addEventListener("keydown", function(e){ if(e.key === "Escape"){ openSheet(false); fabState(); } });
+let sy = 0;
+sheet.addEventListener("touchstart", function(e){ sy = e.touches[0].clientY; }, {passive:true});
+sheet.addEventListener("touchmove", function(e){ if(e.touches[0].clientY - sy > 70){ openSheet(false); fabState(); } }, {passive:true});
 const pw = document.getElementById("password");
-pw.addEventListener("focus", function(){ dock.classList.add("hide"); });
-pw.addEventListener("blur", function(){ dock.classList.remove("hide"); });
+pw.addEventListener("focus", function(){ fab.classList.remove("show"); });
+pw.addEventListener("blur", fabState);
 
 /* phone gyroscope parallax on logo (Android / permitted devices) */
 if(touch && "DeviceOrientationEvent" in window){
