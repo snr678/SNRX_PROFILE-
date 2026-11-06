@@ -1866,17 +1866,45 @@ font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;color:
 #bldHud u{display:block;height:2px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;text-decoration:none}
 #bldHud u i{display:block;height:100%;background:linear-gradient(90deg,#720016,var(--red),#fff);box-shadow:0 0 10px var(--red);transform-origin:0 50%;transform:scaleX(0)}
 
-.pc{position:absolute;left:0;top:0;will-change:transform,opacity;opacity:0}
-.pc svg{display:block;width:22px;height:22px;filter:drop-shadow(0 0 6px rgba(255,23,68,.9))}
-.pc em{position:absolute;left:17px;top:17px;padding:2px 7px;border-radius:4px;font-style:normal;white-space:nowrap;
-font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:#fff;background:var(--red);box-shadow:0 0 12px rgba(255,23,68,.6)}
-.pc.w em{background:#eee;color:#111;box-shadow:0 0 12px rgba(255,255,255,.35)}
+.pc{position:absolute;left:0;top:0;will-change:transform,opacity;opacity:0;--c:#ff1744;--t:#fff}
+.pc.c-trace{--c:#e8e8e8;--t:#111}
+.pc.c-scout{--c:#00e5ff;--t:#04141a}
+.pc.c-polish{--c:#8f98a6;--t:#0b0b0b}
+.pc::before{content:"";position:absolute;left:-14px;top:-15px;width:34px;height:34px;border-radius:50%;
+background:radial-gradient(circle,var(--c) 0,transparent 68%);opacity:.2;pointer-events:none}
+.pc svg{display:block;width:20px;height:20px;overflow:visible}
+.pc svg .b{fill:var(--c);stroke:#050505;stroke-width:1.3;stroke-linejoin:round}
+.pc em{position:absolute;left:15px;top:17px;padding:2px 7px;border-radius:4px;font-style:normal;white-space:nowrap;
+font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--t);background:var(--c)}
+.pc em small{margin-left:6px;font-size:8px;letter-spacing:1px;text-transform:uppercase;opacity:.6}
+.pc .rp{position:absolute;left:3px;top:2px;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;
+border:1px solid var(--c);opacity:0;pointer-events:none}
+.pc .rp.go{animation:pcRp .6s ease-out}
+@keyframes pcRp{0%{opacity:.8;transform:scale(.4)}100%{opacity:0;transform:scale(3)}}
 
 @media(max-width:700px){
 #bldIntro{top:92px}
 .bi-k{font-size:10px;letter-spacing:4px}
 #bldHud{left:16px;bottom:16px;font-size:9px}
 }
+
+
+/* =====================================================
+   SOCIAL CARD GLITCH  (short, subtle bursts on hover / tap)
+===================================================== */
+.card::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+background:linear-gradient(180deg,transparent 0 30%,rgba(255,23,68,.16) 30% 36%,transparent 36% 62%,rgba(0,229,255,.12) 62% 66%,transparent 66%)}
+.card.glx{border-color:rgba(255,23,68,.75)}
+.card.glx::after{animation:cgSlice .34s steps(1)}
+.card.glx h3,.card.glx p{animation:cgText .34s steps(1)}
+.card.glx .icon{animation:cgIcon .34s steps(1)}
+@keyframes cgText{0%,100%{translate:0 0;text-shadow:none}
+20%{translate:-3px 0;text-shadow:2px 0 #00e5ff,-2px 0 #ff1744}
+45%{translate:3px 0;text-shadow:-2px 0 #00e5ff,2px 0 #ff1744}
+70%{translate:-1px 0;text-shadow:1px 0 #00e5ff,-1px 0 #ff1744}}
+@keyframes cgIcon{0%,100%{translate:0 0}20%{translate:-4px 0}45%{translate:4px 0}70%{translate:-2px 0}}
+@keyframes cgSlice{0%{opacity:1;transform:translateY(-12%)}30%{transform:translateY(10%)}60%{transform:translateY(-4%)}85%{transform:translateY(14%)}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.card.glx h3,.card.glx p,.card.glx .icon,.card.glx::after{animation:none !important}}
 
 </style>
 
@@ -3595,22 +3623,48 @@ else{
     }).observe(overlay, {attributes:true, attributeFilter:["class"]});
 }
 
-/* ---------- cursors ---------- */
-const NAMES = ["SNRX","ZOD","ROOT","NULL","GHOST","VOID","KERNEL","BYTE","PIXEL","CIPHER","ECHO","RAZE","SYNC","NEON"];
-const N = innerWidth < 700 ? 8 : 14;
-const SVG = '<svg viewBox="0 0 24 24"><path d="M3 2v17l4.8-4.4L11 22l3-1.3-3.2-7.4H18z" fill="#fff" stroke="#ff1744" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+/* ---------- cursors: 4 crews, each with its own job, color and motion ----------
+   BUILD  (red)    ride the build edge and sweep up/down, painting the part
+   TRACE  (cyan)   walk around the outline of the part (blueprint tracing)
+   SCOUT  (amber)  run ahead to the NEXT part, spread along its top edge and click on it
+   POLISH (violet) glide side to side over finished parts, trail behind the builders */
+const NAMES = ["SNRX","ZOD","ROOT","KERNEL","BYTE","GHOST","VOID","NULL","ECHO","SYNC","RAZE","NEON","PIXEL","CIPHER"];
+const small = innerWidth < 700;
+const CREWS = [
+    {k:"build",  tag:"build",  n:small ? 2 : 3, f:.14, ck:[3500,3000]},
+    {k:"trace",  tag:"trace",  n:small ? 1 : 2, f:.09, ck:[6000,4000]},
+    {k:"scout",  tag:"scout",  n:small ? 1 : 2, f:.07, ck:[1800,1800]},
+    {k:"polish", tag:"polish", n:small ? 1 : 1, f:.08, ck:[5000,4000]}
+];
+const SVG = '<svg viewBox="0 0 24 24"><path class="b" d="M3 2v17l4.8-4.4L11 22l3-1.3-3.2-7.4H18z"/></svg>';
 const cursors = [];
-for(let i = 0; i < N; i++){
-    const el = document.createElement("div");
-    el.className = "pc" + (i % 3 === 1 ? " w" : "");
-    el.innerHTML = SVG + "<em>" + NAMES[i % NAMES.length] + "</em>";
-    cur.appendChild(el);
-    cursors.push({
-        el:el, x:innerWidth / 2, y:-60,
-        a:(i / N) * 6.283 + Math.random(), r:26 + Math.random() * 78,
-        sp:(.35 + Math.random() * .5) * (i % 2 ? 1 : -1),
-        f:.07 + (i % 5) * .022, yf:.18 + ((i * .618) % 1) * .62
-    });
+let ni = 0, polAt = 0, polEl = null;
+CREWS.forEach(function(cr, ci){
+    for(let g = 0; g < cr.n; g++){
+        const el = document.createElement("div");
+        el.className = "pc c-" + cr.k;
+        el.innerHTML = '<u class="rp"></u>' + SVG + '<em>' + NAMES[ni % NAMES.length] + '<small>' + cr.tag + '</small></em>';
+        cur.appendChild(el);
+        cursors.push({
+            el:el, svg:el.querySelector("svg"), rp:el.querySelector(".rp"),
+            ci:ci, gi:g, gn:cr.n, x:innerWidth / 2 + (Math.random() - .5) * 200, y:-60, rot:0, tg:null,
+            a:Math.random() * 6.283, r:26 + Math.random() * 78,
+            sp:(.35 + Math.random() * .5) * (ni % 2 ? 1 : -1),
+            f:cr.f, nc:performance.now() + 500 + Math.random() * 2000
+        });
+        ni++;
+    }
+});
+const clampX = function(x){ return Math.min(innerWidth - 12, Math.max(12, x)); };
+const clampY = function(y){ return Math.min(innerHeight - 30, Math.max(40, y)); };
+function pclick(c){ c.rp.classList.remove("go"); void c.rp.offsetWidth; c.rp.classList.add("go"); }
+/* point on a rectangle outline, p = 0..1 */
+function perim(r, p){
+    const w = r.width, h = r.height; let d = p * 2 * (w + h);
+    if(d < w) return [r.left + d, r.top];
+    d -= w; if(d < h) return [r.right, r.top + d];
+    d -= h; if(d < w) return [r.right - d, r.bottom];
+    d -= w; return [r.left, r.bottom - d];
 }
 
 /* ---------- start on first scroll ---------- */
@@ -3705,38 +3759,139 @@ function loop(now){
         finishing = true; setTimeout(finish, 650);
     }
 
+    /* what the scouts and polishers work on this frame */
+    let scoutR = null;
+    if(started && !finishing){
+        for(let i = 0; i < targets.length; i++){
+            if(targets[i].state === 0){ scoutR = targets[i].el.getBoundingClientRect(); break; }
+        }
+        /* looking for a finished part to polish is expensive -> only every ~0.25s */
+        if(now - polAt > 250){
+            polAt = now; polEl = null;
+            for(let i = targets.length - 1; i >= 0; i--){
+                const t = targets[i];
+                if(t.state !== 2) continue;
+                const r = t.el.getBoundingClientRect();
+                if(r.width > 0 && r.bottom > 90 && r.top < H - 50 && r.height < H * .8){ polEl = t.el; break; }
+            }
+        }
+    }
+    const polR = (started && !finishing && polEl) ? polEl.getBoundingClientRect() : null;
+
     /* cursors */
     const now2 = now * .001;
     if(finishing) fade = Math.max(0, fade - dt / 900);
+    const yb = Math.min(400, H * .52), A = active.length;
     for(let i = 0; i < cursors.length; i++){
-        const c = cursors[i];
+        const c = cursors[i], ci = c.ci, g = c.gi, gn = c.gn;
+        const a = c.a + now2 * c.sp;
         let tx, ty;
+
         if(finishing){
             tx = W * (.15 + (i / cursors.length) * .7); ty = -90;
         }else if(!started){
-            const a = c.a + now2 * c.sp;
-            tx = W / 2 + Math.cos(a) * c.r * 1.9;
-            ty = Math.min(400, H * .52) + Math.sin(a) * c.r * .55;
-        }else if(active.length){
-            const t = active[i % active.length], rank = Math.floor(i / active.length);
-            const r = t.r || t.el.getBoundingClientRect();
-            const eb = cl(t.b - rank * .05);
-            tx = Math.min(W - 12, Math.max(12, r.left + eb * (r.width + 60) - 30 + 8));
-            ty = Math.min(H - 30, Math.max(40, r.top + r.height * c.yf)) + Math.sin(now2 * 3 + i) * 5;
+            /* waiting for the first scroll: every crew has its own pattern */
+            if(ci === 0){ tx = W / 2 + Math.cos(a) * c.r * 1.9;                ty = yb + Math.sin(a) * c.r * .55; }
+            else if(ci === 1){ tx = W / 2 + Math.sin(a * .8) * Math.min(W * .3, 260); ty = yb + Math.sin(a * 1.6) * 70; }
+            else if(ci === 2){ tx = W / 2 + (g - 1) * 70 + Math.cos(a * 1.3) * 54;  ty = yb + 30 + Math.sin(a * 1.3) * 54; }
+            else{ tx = W / 2 + Math.sin(a * .6) * Math.min(W * .34, 320);      ty = yb + 110 + Math.sin(a * 3) * 8; }
         }else{
-            /* nothing to build right now: wait at the front line */
-            const a = c.a + now2 * c.sp * .7;
-            tx = W / 2 + Math.cos(a) * c.r * 2.6;
-            ty = H * .8 + Math.sin(a) * c.r * .4;
+            let done = false;
+
+            if(ci === 0 && A){
+                /* BUILD: ride the edge, sweeping up and down the part */
+                const t = active[g % A], r = t.r || t.el.getBoundingClientRect();
+                const eb = cl(t.b - Math.floor(g / A) * .05);
+                tx = clampX(r.left + eb * (r.width + 60) - 30 + 8);
+                ty = clampY(r.top + r.height * (.5 + .46 * Math.sin(now2 * 1.7 + g * 1.9)));
+                if(c.tg !== t){ c.tg = t; pclick(c); }
+                done = true;
+            }else if(ci === 1 && (A || polR)){
+                /* TRACE: walk around the outline at a steady speed */
+                let r;
+                if(A){ const t = active[(g + 1) % A]; r = t.r || t.el.getBoundingClientRect(); } else r = polR;
+                const per = 2 * (r.width + r.height) || 1;
+                const q = perim(r, ((now2 * 260 + g * per / gn) / per) % 1);
+                tx = clampX(q[0]); ty = clampY(q[1]);
+                done = true;
+            }else if(ci === 2 && scoutR){
+                /* SCOUT: stand on the top edge of the next part, spread out, clicking */
+                tx = clampX(scoutR.left + scoutR.width * (g + 1) / (gn + 1) + Math.sin(now2 * 2 + g) * 14);
+                ty = Math.min(H - 36, Math.max(60, scoutR.top - 6 + Math.sin(now2 * 2.6 + g * 2) * 8));
+                done = true;
+            }else if(ci === 2 && A){
+                /* SCOUT with nothing ahead: inspect the corner of a part being built */
+                const t = active[g % A], r = t.r || t.el.getBoundingClientRect();
+                tx = clampX(r.right - 24 - g * 34 + Math.sin(now2 * 2 + g) * 6);
+                ty = clampY(r.top + 14 + Math.sin(now2 * 2.4 + g) * 6);
+                done = true;
+            }else if(ci === 3 && polR){
+                /* POLISH: glide side to side across a finished part */
+                tx = clampX(polR.left + polR.width * (.5 + .46 * Math.sin(now2 * .9 + g * 2.1)));
+                ty = clampY(polR.top + polR.height * (.3 + .4 * g / Math.max(1, gn - 1)) + Math.sin(now2 * 4 + g) * 4);
+                done = true;
+            }else if(ci === 3 && A){
+                /* POLISH with nothing finished on screen: trail behind the builders */
+                const t = active[g % A], r = t.r || t.el.getBoundingClientRect();
+                tx = clampX(r.left + t.b * (r.width + 60) - 120 - g * 30);
+                ty = clampY(r.top + r.height * .5 + Math.sin(now2 * 2 + g) * 10);
+                done = true;
+            }
+
+            if(!done){
+                /* nothing to do right now: wait at the front line */
+                const a2 = c.a + now2 * c.sp * .7;
+                tx = W / 2 + Math.cos(a2) * c.r * 2.6;
+                ty = H * .8 + Math.sin(a2) * c.r * .4;
+            }
         }
+
         const f = 1 - Math.pow(1 - c.f, k);
         c.x += (tx - c.x) * f; c.y += (ty - c.y) * f;
         c.el.style.transform = "translate3d(" + c.x.toFixed(1) + "px," + c.y.toFixed(1) + "px,0)";
         c.el.style.opacity = (c.y < -40 && !finishing) ? 0 : fade;
+
+        /* every crew clicks at its own rhythm */
+        if(started && !finishing && now > c.nc && c.y > 0 && c.y < H){
+            pclick(c); c.nc = now + CREWS[ci].ck[0] + Math.random() * CREWS[ci].ck[1];
+        }
     }
     requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
+})();
+</script>
+
+<script>
+/* =====================================================
+   SOCIAL CARD GLITCH
+   mouse enters a card / finger taps a card -> glitch bursts "por por" (every ~1-1.6s)
+   mouse: keeps going while hovering | touch: keeps going for a few seconds after the tap
+===================================================== */
+(function(){
+if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+document.querySelectorAll(".card").forEach(function(card){
+    let timer = null, endAt = 0, hovering = false;
+    let rm = null;
+    function burst(){
+        card.classList.remove("glx"); void card.offsetWidth; card.classList.add("glx");
+        clearTimeout(rm); rm = setTimeout(function(){ card.classList.remove("glx"); }, 360);
+    }
+    function tick(){
+        burst();
+        timer = setTimeout(function(){
+            if(hovering || performance.now() < endAt) tick(); else timer = null;
+        }, 1200 + Math.random() * 1000);
+    }
+    function start(ms, hold){
+        endAt = performance.now() + ms;
+        if(hold) hovering = true;
+        if(!timer) tick();
+    }
+    card.addEventListener("pointerenter", function(e){ if(e.pointerType === "mouse") start(1200, true); });
+    card.addEventListener("pointerleave", function(e){ if(e.pointerType === "mouse"){ hovering = false; endAt = performance.now() + 1200; } });
+    card.addEventListener("pointerdown", function(){ start(4500, false); });
+});
 })();
 </script>
 
